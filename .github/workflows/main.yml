@@ -10,9 +10,10 @@ jobs:
         with:
           node-version: "12.x"
 
-      - run: npm install
-      - run: npm run build
-      - run: cp package.json package-lock.json dist
+      - run: npm run preinstall
+      - run: npm run install
+      - run: npm run start
+      - run: npm run react-dev
 
       - uses: actions/upload-artifact@v1
         with:

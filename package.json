@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "cd awp-assignment-backend && npm start",
-    "react-dev": "cd awp-assignment-backend && npm start",
+    "react-dev": "cd awp-assignment-frontend && npm start",
     "test": "cd awp-assignment-backend && npm test",
     "preinstall": "cd awp-assignment-backend && npm install",
-    "install": "cd awp-assignment-backend && npm install",
-    "build": "cd awp-assignment-backend && npm run build"
+    "install": "cd awp-assignment-frontend && npm install",
+    "build": "cd awp-assignment-frontend && npm run build"
   },
   "author": "Robin Co.",
   "license": "ISC",
