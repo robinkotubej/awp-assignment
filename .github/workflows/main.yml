@@ -11,17 +11,16 @@ jobs:
           node-version: "12.x"
 
       - run: npm run preinstall
-      - run: npm run install
-      - run: npm run start
-      - run: npm run react-dev
+      - run: npm run build-backend
+      - run: cd awp-assignment-backend && cp package.json package-lock.json dist
 
       - uses: actions/upload-artifact@v1
         with:
           name: dist
           path: dist
 
-  deploy-dev:
-    if: contains(github.ref, 'develop')
+  deploy-backend:
+    if: contains(github.ref, 'master')
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -33,23 +32,38 @@ jobs:
 
       - run: echo "${{ secrets.SSH_KEY }}" > key
       - run: chmod 400 key
-      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/dev/
-      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/dev && npm i"
-      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart dev-krouzky"
+      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/awp/backend/
+      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/awp/backend && npm i"
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/setup-node@v1
+#         with:
+#           node-version: "12.x"
 
-  deploy-prod:
-    if: contains(github.ref, 'master')
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v1
-        with:
-          name: dist
-          path: dist
+#       - run: npm run install
+#       - run: npm run build
 
-      - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
-      - run: chmod 400 key
-      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/prod/
-      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/prod && npm i"
-      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart prod-krouzky"
+#       - uses: actions/upload-artifact@v1
+#         with:
+#           name: dist
+#           path: dist
+
+#   deploy-prod:
+#     if: contains(github.ref, 'master')
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/download-artifact@v1
+#         with:
+#           name: dist
+#           path: dist
+
+#       - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
+#       - run: chmod 400 key
+#       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/prod/
+#       - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/prod && npm i"
+#       - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart prod-krouzky"

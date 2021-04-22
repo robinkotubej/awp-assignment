@@ -8,7 +8,8 @@
     "test": "cd awp-assignment-backend && npm test",
     "preinstall": "cd awp-assignment-backend && npm install",
     "install": "cd awp-assignment-frontend && npm install",
-    "build": "cd awp-assignment-frontend && npm run build"
+    "build": "cd awp-assignment-frontend && npm run build",
+    "build-backend": "cd awp-assignment-backend && npm run build"
   },
   "author": "Robin Co.",
   "license": "ISC",
