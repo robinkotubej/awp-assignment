@@ -1,17 +1,54 @@
-name: Build & Deploy
-on:
-  push:
-    branches: [master]
+name: CI
+on: [push]
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy NodeJS app
-        uses: appleboy/ssh-action@v0.1.2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          host: ${{secrets.SSH_HOST}}
-          key: ${{secrets.SSH_KEY}}
-          username: ${{secrets.SSH_USERNAME}}
+          node-version: "12.x"
 
-          script: |
-            git clone https://github.com/robinkotubej/awp-assignment.git
+      - run: npm install
+      - run: npm run build
+      - run: cp package.json package-lock.json dist
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+
+  deploy-dev:
+    if: contains(github.ref, 'develop')
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: dist
+
+      - run: echo "${{ secrets.SSH_KEY }}" > key
+      - run: chmod 400 key
+      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/dev/
+      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/dev && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart dev-krouzky"
+
+  deploy-prod:
+    if: contains(github.ref, 'master')
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: dist
+
+      - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
+      - run: chmod 400 key
+      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/prod/
+      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/prod && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart prod-krouzky"
