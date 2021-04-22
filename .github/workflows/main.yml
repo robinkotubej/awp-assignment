@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/upload-artifact@v1
         with:
-          name: awp-assignment-backend/dist
+          name: dist
           path: awp-assignment-backend/dist
 
   deploy-backend:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v1
         with:
-          name: awp-assignment-backend/dist
+          name: dist
           path: awp-assignment-backend/dist
 
       - run: echo "${{ secrets.SSH_KEY }}" > key
