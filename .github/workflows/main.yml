@@ -34,7 +34,8 @@ jobs:
       - run: chmod 400 key
       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" awp-assignment-backend/dist root@159.65.114.184:~/awp/backend/
       - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/awp/backend && npm i"
-# jobs:
+
+      # jobs:
 #   build:
 #     runs-on: ubuntu-latest
 #     steps:
