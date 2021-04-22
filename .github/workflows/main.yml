@@ -16,8 +16,8 @@ jobs:
 
       - uses: actions/upload-artifact@v1
         with:
-          name: dist
-          path: dist
+          name: awp-assignment-backend/dist
+          path: awp-assignment-backend/dist
 
   deploy-backend:
     if: contains(github.ref, 'master')
