@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -25,8 +25,9 @@ a {
   outline: none;
   cursor: pointer;
   color: initial;
+  cursor: pointer;
 }
 
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;
