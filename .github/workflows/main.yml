@@ -1,38 +1,17 @@
-  name: CI
-on: [push]
-
+name: Build & Deploy
+on:
+  push:
+    branches: [master]
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Deploy NodeJS app
+        uses: appleboy/ssh-action@v0.1.2
         with:
-          node-version: '12.x'
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
 
-      - run: npm install
-      - run: npm run build
-      - run: cp package.json package-lock.json dist
-
-      - uses: actions/upload-artifact@v1
-        with:
-          name: dist
-          path: dist
-
-  deploy-prod:
-    if: contains(github.ref, 'master')
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v1
-        with:
-          name: dist
-          path: dist
-
-      - run: echo "${{ secrets.SSH_KEY }}" > key
-      - run: echo "${{ secrets.SSH_HOST }}" > host
-      - run: chmod 400 key
-      - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@host:~/awp-assignment/prod/
-      - run: ssh -i key -o StrictHostKeyChecking=no root@host "cd ~/awp-assignment/prod && npm i"
-    
+          script: |
+            git clone https://github.com/robinkotubej/awp-assignment.git
