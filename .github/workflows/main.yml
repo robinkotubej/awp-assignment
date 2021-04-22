@@ -28,7 +28,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: dist
-          path: dist
+          path: awp-assignment-backend/dist
 
       - run: echo "${{ secrets.SSH_KEY }}" > key
       - run: chmod 400 key
