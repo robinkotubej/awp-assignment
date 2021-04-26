@@ -2,7 +2,7 @@ name: CI
 on: [push]
 
 jobs:
-  build-bakcend:
+  build-backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
   deploy-backend:
     if: contains(github.ref, 'master')
     runs-on: ubuntu-latest
-    needs: build-bakcend
+    needs: build-backend
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v1
@@ -33,7 +33,8 @@ jobs:
       - run: echo "${{ secrets.SSH_KEY }}" > key
       - run: chmod 400 key
       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" awp-assignment-backend/dist root@164.90.164.4:~/awp/backend/
-      - run: "ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 cd /root/awp/backend/dist && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 "cd /root/awp/backend/dist && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 "pm2 restart index.js"
 
   build-frontend:
     runs-on: ubuntu-latest
