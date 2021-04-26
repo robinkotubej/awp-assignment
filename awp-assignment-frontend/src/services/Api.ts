@@ -3,7 +3,7 @@ import Question from '../types/Question'
 const getApiUrl = () => {
   if (window.location.origin === 'http://164.90.164.4') {
     return 'http://164.90.164.4:8080'
-  } else return '${getApiUrl()}'
+  } else return 'http://localhost:8080'
 }
 
 class Api {
