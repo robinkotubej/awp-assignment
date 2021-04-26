@@ -7,6 +7,7 @@ import ChevronDown from '../icons/ChevronDown'
 import { COLOR } from '../constants'
 import { useEffect, useState } from 'react'
 import Api from '../services/Api'
+import Question from '../types/Question'
 
 interface Props {
   answer: Answer
@@ -15,34 +16,43 @@ interface Props {
 
 const AnswerPreview = ({ answer, questionId }: Props) => {
   const [vote, setVote] = useState<'up' | 'down' | null>(null)
-  const handleVote = (value: 'up' | 'down') => {
-    setVote(value)
-  }
+  const [answert, setAnswert] = useState(answer)
 
   useEffect(() => {
-    if (vote === 'up') {
-      Api.rateAnswerUp(questionId, answer.answerId)
-    } else if (vote === 'down') {
-      Api.rateAnswerDown(questionId, answer.answerId)
+    const handleFetch = async (vote: string | null) => {
+      if (vote === 'up') {
+        const q = await Api.rateAnswerUp(questionId, answer.answerId)
+        const currentAns = q.answers.find(a => {
+          return a.answerId === answer.answerId
+        })
+        setAnswert(currentAns!)
+      } else if (vote === 'down') {
+        const q = await Api.rateAnswerDown(questionId, answer.answerId)
+        const currentAns = q.answers.find(a => {
+          return a.answerId === answer.answerId
+        })
+        setAnswert(currentAns!)
+      }
     }
-  }, [vote])
+    handleFetch(vote)
+  }, [vote, questionId, answer.answerId])
 
   return (
     <Container>
       <VotesWrapper>
-        <VoteBtnUp onClick={() => handleVote('up')} voted={vote}>
+        <VoteBtnUp onClick={() => setVote('up')} voted={vote}>
           <ChevronUp />
         </VoteBtnUp>
-        <span>{answer.upVoteCount - answer.downVoteCount}</span>
-        <VoteBtnDown onClick={() => handleVote('down')} voted={vote}>
+        <span>{answert.upVoteCount - answert.downVoteCount}</span>
+        <VoteBtnDown onClick={() => setVote('down')} voted={vote}>
           <ChevronDown />
         </VoteBtnDown>
       </VotesWrapper>
       <Wrapper>
-        <Date>{moment(answer.timeCreated).format('YYYY/M/D HH:MM')}</Date>
-        <AnswerText>{answer.answer}</AnswerText>
+        <Date>{moment(answert.timeCreated).format('YYYY/M/D HH:MM')}</Date>
+        <AnswerText>{answert.answer}</AnswerText>
       </Wrapper>
-      <UserBouble userName={answer.username} align="left" />
+      <UserBouble userName={answert.username} align="left" />
     </Container>
   )
 }

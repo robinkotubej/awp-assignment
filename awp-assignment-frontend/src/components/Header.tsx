@@ -1,7 +1,6 @@
 import NavLink from './NavLink'
 import styled from 'styled-components'
 import { COLOR } from '../constants'
-import React from 'react'
 import MessageSVG from '../icons/MessageSVG'
 
 const Header = () => {

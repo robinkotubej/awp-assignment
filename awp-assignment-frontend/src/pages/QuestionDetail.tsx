@@ -11,7 +11,7 @@ interface QuestionProps extends RouteComponentProps {
 }
 
 const QuestionDetail = ({ questionId }: QuestionProps) => {
-  const [question, setQuestion] = useState<Question>()
+  const [question, setQuestion] = useState<Question | undefined>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -19,7 +19,6 @@ const QuestionDetail = ({ questionId }: QuestionProps) => {
       try {
         if (questionId) {
           const question = await Api.getQuestion(questionId)
-          console.log(question)
           setQuestion(question)
           setLoading(false)
         }
