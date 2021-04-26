@@ -34,36 +34,36 @@ jobs:
       - run: chmod 400 key
       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" awp-assignment-backend/dist root@164.90.164.4:~/awp/backend/
       - run: "ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 cd /root/awp/backend/dist && npm i"
-# jobs :
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: "12.x"
 
-#       - run: npm run install
-#       - run: npm run build
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
 
-#       - uses: actions/upload-artifact@v1
-#         with:
-#           name: dist
-#           path: dist
+      - run: npm run install
+      - run: npm run build
 
-#   deploy-prod:
-#     if: contains(github.ref, 'master')
-#     runs-on: ubuntu-latest
-#     needs: build
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/download-artifact@v1
-#         with:
-#           name: dist
-#           path: dist
+       - uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: awp-assignment-frontend/build
 
-#       - run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key
-#       - run: chmod 400 key
-#       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" dist/ root@159.65.114.184:~/krouzky/prod/
-#       - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "cd ~/krouzky/prod && npm i"
-#       - run: ssh -i key -o StrictHostKeyChecking=no root@159.65.114.184 "pm2 restart prod-krouzky"
+  deploy-frontend:
+      if: contains(github.ref, 'master')
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/download-artifact@v1
+          with:
+            name: build
+            path: awp-assignment-backend/build
+
+        - run: echo "${{ secrets.SSH_KEY }}" > key
+        - run: chmod 400 key
+        - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" awp-assignment-frontend/build root@164.90.164.4:~/awp/frontend/
+        
