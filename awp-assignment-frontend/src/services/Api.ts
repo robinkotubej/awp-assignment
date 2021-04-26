@@ -1,8 +1,14 @@
 import Question from '../types/Question'
 
+const getApiUrl = () => {
+  if (window.location.origin === 'http://164.90.164.4') {
+    return 'http://164.90.164.4:8080'
+  } else return '${getApiUrl()}'
+}
+
 class Api {
   static async postQuestion(username: string, question: string) {
-    const response = await fetch(`http://localhost:8080/post-question`, {
+    const response = await fetch(`${getApiUrl()}/post-question`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, question }),
@@ -12,15 +18,13 @@ class Api {
   }
 
   static async getQuestion(questionId: string) {
-    const response = await fetch(
-      `http://localhost:8080/get-question/${questionId}`
-    )
+    const response = await fetch(`${getApiUrl()}/get-question/${questionId}`)
     const data = await response.json()
     return data as Question
   }
 
   static async getQuestions() {
-    const response = await fetch(`http://localhost:8080/get-questions`)
+    const response = await fetch(`${getApiUrl()}/get-questions`)
     const data = await response.json()
     return data as Question[]
   }
@@ -30,21 +34,18 @@ class Api {
     answer: string,
     questionId: string
   ) {
-    const response = await fetch(
-      `http://localhost:8080/post-answer/${questionId}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, answer }),
-      }
-    )
+    const response = await fetch(`${getApiUrl()}/post-answer/${questionId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, answer }),
+    })
     const data = await response.json()
     return data as Question
   }
 
   static async rateAnswerUp(questionId: string, answerId: string) {
     const response = await fetch(
-      `http://localhost:8080/rate-answer-up/${questionId}/${answerId}`,
+      `${getApiUrl()}/rate-answer-up/${questionId}/${answerId}`,
       {
         method: 'POST',
       }
@@ -55,7 +56,7 @@ class Api {
 
   static async rateAnswerDown(questionId: string, answerId: string) {
     const response = await fetch(
-      `http://localhost:8080/rate-answer-down/${questionId}/${answerId}`,
+      `${getApiUrl()}/rate-answer-down/${questionId}/${answerId}`,
       {
         method: 'POST',
       }
