@@ -7,7 +7,6 @@ import ChevronDown from '../icons/ChevronDown'
 import { COLOR } from '../constants'
 import { useEffect, useState } from 'react'
 import Api from '../services/Api'
-import Question from '../types/Question'
 
 interface Props {
   answer: Answer
