@@ -36,7 +36,7 @@ jobs:
       - run: "ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 cd /root/awp/backend/dist && npm i"
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
       - run: npm run install
       - run: npm run build
 
-       - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v1
         with:
           name: build
           path: awp-assignment-frontend/build
