@@ -8,6 +8,7 @@ import getQuestion from './routes/question/getQuestion'
 import postAnswer from './routes/answer/postAnswer'
 import rateAnswerUp from './routes/answer/rateAnswerUp'
 import rateAnswerDown from './routes/answer/rateAnswerDown'
+import createInitialQuestion from './utils/createInitialQuestions'
 
 const app = express()
 const port = 8080 // default port to listen
@@ -21,6 +22,7 @@ const options = {
 new MongoClient('mongodb://localhost', options).connect().then(client => {
     // db name
     const db = client.db('awp-db')
+    createInitialQuestion(db)
     // allow cors
     app.use(cors())
     app.use(bodyParser.urlencoded({ extended: false }))
