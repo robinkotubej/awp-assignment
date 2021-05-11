@@ -37,7 +37,7 @@ jobs:
         with:
           hosts: "164.90.164.4"
           privateKey: ${{ secrets.SSH_KEY }}
-          command: cd /root/awp/backend/dist && npm install
+          command: ls
 
   build-frontend:
     runs-on: ubuntu-latest
