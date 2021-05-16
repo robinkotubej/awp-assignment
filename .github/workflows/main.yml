@@ -33,7 +33,8 @@ jobs:
       - run: echo "${{ secrets.SSH_KEY }}" > key
       - run: chmod 400 key
       - run: rsync -rav --delete -e "ssh -i key -o StrictHostKeyChecking=no" awp-assignment-backend/dist root@164.90.164.4:~/awp/backend/
-      - run: ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 cd "/root/awp/backend/dist && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 "cd /root/awp/backend/dist && npm i"
+      - run: ssh -i key -o StrictHostKeyChecking=no root@164.90.164.4 "cd /root/awp/backend/dist && pm2 restart index.js"
 
   # build-frontend:
   #   runs-on: ubuntu-latest
