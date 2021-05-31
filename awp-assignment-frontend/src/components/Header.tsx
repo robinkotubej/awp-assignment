@@ -8,11 +8,14 @@ const Header = () => {
     <Container>
       <Logo>
         <MessageSVG />
-        <LogoText>Message board app</LogoText>
+        <NavLink to="/">
+          <LogoText>Message board app</LogoText>
+        </NavLink>
       </Logo>
       <Navigation>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/ask-question">Ask Question</NavLink>
+        <NavLink to="/login">Login</NavLink>
       </Navigation>
     </Container>
   )
