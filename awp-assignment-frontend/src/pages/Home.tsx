@@ -6,7 +6,7 @@ import Api from '../services/Api'
 import Question from '../types/Question'
 
 const Home = (props: RouteComponentProps) => {
-  const [questions, setQuestions] = useState<Question[]>()
+  const [questions, setQuestions] = useState<Question[] | null>()
   const [loading, setLoading] = useState(true)
 
   const fetchQuestions = async () => {
@@ -15,13 +15,14 @@ const Home = (props: RouteComponentProps) => {
       setQuestions(questions)
       setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.log(error)
     }
   }
 
   useEffect(() => {
     fetchQuestions()
-  })
+  }, [loading])
 
   return (
     <div>
