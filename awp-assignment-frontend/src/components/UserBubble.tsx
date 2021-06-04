@@ -3,7 +3,7 @@ import { COLOR } from '../constants'
 
 interface Props {
   userName: string
-  align: 'left' | 'right'
+  align: 'left' | 'right' | 'initial'
 }
 
 const UserBubble = ({ userName, align }: Props) => (

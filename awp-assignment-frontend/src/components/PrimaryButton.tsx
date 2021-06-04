@@ -1,11 +1,15 @@
+import { InputHTMLAttributes } from 'react'
 import styled from 'styled-components'
 import { COLOR } from '../constants'
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLButtonElement> {
   text: string
+  onClick: () => void
 }
-const PrimaryButton = ({ text }: Props) => (
-  <Container type="submit">{text}</Container>
+const PrimaryButton = ({ text, onClick }: Props) => (
+  <Container type="submit" onClick={onClick}>
+    {text}
+  </Container>
 )
 
 const Container = styled.button`

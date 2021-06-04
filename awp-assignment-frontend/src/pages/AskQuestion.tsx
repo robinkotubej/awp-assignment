@@ -1,10 +1,10 @@
 import { RouteComponentProps } from '@reach/router'
-import Form from '../components/Form'
+import AskForm from '../components/AskForm'
 
 const AskQuestion = (props: RouteComponentProps) => (
   <div>
     <h2>Post question</h2>
-    <Form type="question" />
+    <AskForm />
   </div>
 )
 

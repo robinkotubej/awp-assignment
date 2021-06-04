@@ -1,6 +1,6 @@
 import Question from '../types/Question'
 
-const getApiUrl = () => {
+export const getApiUrl = () => {
   if (window.location.origin === 'http://164.90.164.4') {
     return 'http://164.90.164.4:8080'
   } else return 'http://localhost:8080'
@@ -63,6 +63,27 @@ class Api {
     )
     const data = await response.json()
     return data as Question
+  }
+  static async authorizeUser(email: string, password: string) {
+    const response = await fetch(`${getApiUrl()}/oauth/authorize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    const data = await response.json()
+    return data
+  }
+  static async renewToken(userId: string, accessToken: string) {
+    const response = await fetch(`${getApiUrl()}/oauth/renewToken`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ userId }),
+    })
+    const data = await response.json()
+    return data
   }
 }
 

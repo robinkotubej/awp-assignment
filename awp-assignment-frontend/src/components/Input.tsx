@@ -15,8 +15,8 @@ const Input = ({ label, error, ...props }: Props) => (
 
       {error && (
         <ErrorMessage>
-          <ErrorSVG />
           {error}
+          <ErrorSVG />
         </ErrorMessage>
       )}
     </LabelRow>
