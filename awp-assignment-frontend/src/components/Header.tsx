@@ -3,7 +3,12 @@ import styled from 'styled-components'
 import { COLOR } from '../constants'
 import MessageSVG from '../icons/MessageSVG'
 
+import ProfileLink from './ProfileLink'
+import { useAuth } from '../services/Auth'
+
 const Header = () => {
+  const { loggedIn, logout } = useAuth()
+
   return (
     <Container>
       <Logo>
@@ -15,7 +20,16 @@ const Header = () => {
       <Navigation>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/ask-question">Ask Question</NavLink>
-        <NavLink to="/login">Login</NavLink>
+        {loggedIn ? (
+          <>
+            <ProfileLink />
+            <NavLink to="/" onClick={() => logout()}>
+              Logout
+            </NavLink>
+          </>
+        ) : (
+          <NavLink to="/login">Login</NavLink>
+        )}
       </Navigation>
     </Container>
   )

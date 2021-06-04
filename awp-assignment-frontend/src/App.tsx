@@ -5,20 +5,23 @@ import Home from './pages/Home'
 import styled from 'styled-components'
 import QuestionDetail from './pages/QuestionDetail'
 import Login from './pages/Login'
+import { AuthProvider } from './services/Auth'
 
 function App() {
   return (
-    <Container>
-      <Header />
-      <Content>
-        <Router>
-          <Home path="/" />
-          <AskQuestion path="/ask-question" />
-          <QuestionDetail path="question/:questionId" />
-          <Login path="/login" />
-        </Router>
-      </Content>
-    </Container>
+    <AuthProvider>
+      <Container>
+        <Header />
+        <Content>
+          <Router>
+            <Home path="/" />
+            <AskQuestion path="/ask-question" />
+            <QuestionDetail path="question/:questionId" />
+            <Login path="/login" />
+          </Router>
+        </Content>
+      </Container>
+    </AuthProvider>
   )
 }
 
