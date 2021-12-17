@@ -40,6 +40,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
       }
     }
     fetchUser()
+    // eslint-disable-next-line
   }, [userId])
   return (
     <Container>
