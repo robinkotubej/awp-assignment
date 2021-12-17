@@ -2,6 +2,13 @@ import oAuth from '../types/oAuth'
 import Wish from '../types/Wish'
 import User from '../types/User'
 
+interface CreateExtraWishProps {
+  accessToken: string
+  title: string
+  description?: string
+  externalUrl?: string
+}
+
 export const getApiUrl = () => {
   if (window.location.origin === 'http://164.90.164.4') {
     return 'http://164.90.164.4:8080'
@@ -50,12 +57,12 @@ class Api {
     return data as Wish
   }
 
-  static async createWish(
-    accessToken: string,
-    title: string,
-    description?: string,
-    externalLink?: string
-  ) {
+  static async createWish({
+    accessToken,
+    title,
+    description,
+    externalUrl,
+  }: CreateExtraWishProps) {
     const response = await fetch(`${getApiUrl()}/create-wish`, {
       method: 'POST',
       headers: {
@@ -65,7 +72,7 @@ class Api {
       body: JSON.stringify({
         title,
         description,
-        externalLink,
+        externalUrl,
       }),
     })
     const data = await response.json()

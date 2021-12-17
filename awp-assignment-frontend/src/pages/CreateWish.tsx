@@ -41,12 +41,12 @@ const CreateWish = (props: RouteComponentProps) => {
     }
     if (!titleErr && accessToken) {
       try {
-        const res = await Api.createWish(
+        const res = await Api.createWish({
           accessToken,
           title,
           description,
-          externalUrl
-        )
+          externalUrl,
+        })
 
         navigate(`/wish/${res.userId}/${res.wishId}`)
       } catch (error) {
