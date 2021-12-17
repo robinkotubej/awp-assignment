@@ -2,13 +2,15 @@ import styled from 'styled-components'
 import { COLOR } from '../constants'
 
 interface Props {
-  userName: string
+  userName?: string
   align: 'left' | 'right' | 'initial'
 }
 
 const UserBubble = ({ userName, align }: Props) => (
   <Container align={align}>
-    {userName.charAt(0) + userName.charAt(userName.length - 1)}
+    {userName
+      ? userName?.charAt(0) + userName.charAt(userName.length - 1)
+      : undefined}
   </Container>
 )
 

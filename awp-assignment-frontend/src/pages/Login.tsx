@@ -1,9 +1,10 @@
-import { RouteComponentProps } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import { useState } from 'react'
 import styled from 'styled-components'
 import Heading from '../components/Heading'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
+import WhiteBox from '../components/WhiteBox'
 import { EMAILREGEX } from '../constants'
 import Api from '../services/Api'
 import { useAuth } from '../services/Auth'
@@ -33,7 +34,7 @@ const Login = (props: RouteComponentProps) => {
     }
   }
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async () => {
     if (!EMAILREGEX.test(email)) {
       setEmailError('Write right email')
     } else if (password.length < 2) {
@@ -50,46 +51,40 @@ const Login = (props: RouteComponentProps) => {
       } else if (res.token) {
         const { userId, username } = decodeJWT(res.token)
         login(userId, username, res.token)
+        navigate('/', { replace: true })
       }
     }
   }
   return (
-    <Container>
+    <WhiteBox>
       <Heading>Please Login</Heading>
-      <Input
-        label="Email"
-        onChange={e => {
-          setEmail(e.target.value)
-          handleEmailError()
+      <From
+        onSubmit={e => {
+          e.preventDefault()
+          handleLogin()
         }}
-        error={emailError}
-      />
-      <Input
-        label="Password"
-        type="password"
-        onChange={e => {
-          setPassword(e.target.value)
-          handlePassError()
-        }}
-        error={passError}
-      />
-      <PrimaryButton
-        text="Submit"
-        onClick={() => handleLogin(email, password)}
-      />
-    </Container>
+      >
+        <Input
+          label="Email"
+          onChange={e => {
+            setEmail(e.target.value)
+            handleEmailError()
+          }}
+          error={emailError}
+        />
+        <Input
+          label="Password"
+          type="password"
+          onChange={e => {
+            setPassword(e.target.value)
+            handlePassError()
+          }}
+          error={passError}
+        />
+        <PrimaryButton text="Submit" />
+      </From>
+    </WhiteBox>
   )
 }
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fff;
-  width: 800px;
-  padding: 64px 64px;
-  margin: 64px auto;
-  border-radius: 48px;
-  box-shadow: 2px 0px 32px rgba(0, 0, 0, 0.05);
-`
-
+const From = styled.form``
 export default Login

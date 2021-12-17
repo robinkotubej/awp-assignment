@@ -14,12 +14,12 @@ const Header = () => {
       <Logo>
         <MessageSVG />
         <NavLink to="/">
-          <LogoText>Message board app</LogoText>
+          <LogoText>Wishlister app</LogoText>
         </NavLink>
       </Logo>
       <Navigation>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/ask-question">Ask Question</NavLink>
+        <NavLink to="/create-wish">Create Wish</NavLink>
         {loggedIn ? (
           <>
             <ProfileLink />

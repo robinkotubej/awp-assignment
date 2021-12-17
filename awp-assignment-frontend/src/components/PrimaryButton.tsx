@@ -4,16 +4,17 @@ import { COLOR } from '../constants'
 
 interface Props extends InputHTMLAttributes<HTMLButtonElement> {
   text: string
-  onClick: () => void
+  onClick?: () => void
+  width?: number
 }
-const PrimaryButton = ({ text, onClick }: Props) => (
-  <Container type="submit" onClick={onClick}>
+const PrimaryButton = ({ text, onClick, width }: Props) => (
+  <Container type="submit" onClick={onClick} width={width}>
     {text}
   </Container>
 )
 
-const Container = styled.button`
-  width: 400px;
+const Container = styled.button<{ width?: number }>`
+  width: ${props => (props.width ? props.width : 400)}px;
   height: 50px;
   background: ${COLOR.GREEN};
   border-color: ${COLOR.GREEN};
@@ -28,6 +29,7 @@ const Container = styled.button`
   letter-spacing: 1px;
   transition: 100ms;
   border-style: none;
+  cursor: pointer;
 
   :hover {
     background: ${COLOR.HOVER.GREEN};
