@@ -84,7 +84,7 @@ const CreateWish = (props: RouteComponentProps) => {
           onChange={e => {
             setExternalUrl(e.target.value)
           }}
-          error={externalUrl}
+          value={externalUrl}
         />
         <TextArea
           label="Product description"
@@ -92,7 +92,7 @@ const CreateWish = (props: RouteComponentProps) => {
           onChange={e => {
             setDescription(e.target.value)
           }}
-          error={description}
+          value={description}
         />
         <PrimaryButton text="Create" />
       </Form>
