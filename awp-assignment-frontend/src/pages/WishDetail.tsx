@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { RouteComponentProps, navigate } from '@reach/router'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'

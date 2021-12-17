@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const COLOR = {
   GREEN: '#789045',
   RED: '#E53333',
@@ -14,7 +16,7 @@ export const COLOR = {
     RED: '#CC1A1A',
   },
 }
-// eslint-disable-next-line
+
 export const EMAILREGEX =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{1,})$/i
 
