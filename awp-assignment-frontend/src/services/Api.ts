@@ -1,4 +1,6 @@
-import Question from '../types/Question'
+import oAuth from '../types/oAuth'
+import Wish from '../types/Wish'
+import User from '../types/User'
 
 export const getApiUrl = () => {
   if (window.location.origin === 'http://164.90.164.4') {
@@ -7,63 +9,8 @@ export const getApiUrl = () => {
 }
 
 class Api {
-  static async postQuestion(username: string, question: string) {
-    const response = await fetch(`${getApiUrl()}/post-question`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, question }),
-    })
-    const data = await response.json()
-    return data
-  }
+  // new api
 
-  static async getQuestion(questionId: string) {
-    const response = await fetch(`${getApiUrl()}/get-question/${questionId}`)
-    const data = await response.json()
-    return data as Question
-  }
-
-  static async getQuestions() {
-    const response = await fetch(`${getApiUrl()}/get-questions`)
-    const data = await response.json()
-    return data as Question[]
-  }
-
-  static async postAnswer(
-    username: string,
-    answer: string,
-    questionId: string
-  ) {
-    const response = await fetch(`${getApiUrl()}/post-answer/${questionId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, answer }),
-    })
-    const data = await response.json()
-    return data as Question
-  }
-
-  static async rateAnswerUp(questionId: string, answerId: string) {
-    const response = await fetch(
-      `${getApiUrl()}/rate-answer-up/${questionId}/${answerId}`,
-      {
-        method: 'POST',
-      }
-    )
-    const data = await response.json()
-    return data as Question
-  }
-
-  static async rateAnswerDown(questionId: string, answerId: string) {
-    const response = await fetch(
-      `${getApiUrl()}/rate-answer-down/${questionId}/${answerId}`,
-      {
-        method: 'POST',
-      }
-    )
-    const data = await response.json()
-    return data as Question
-  }
   static async authorizeUser(email: string, password: string) {
     const response = await fetch(`${getApiUrl()}/oauth/authorize`, {
       method: 'POST',
@@ -73,17 +20,95 @@ class Api {
     const data = await response.json()
     return data
   }
-  static async renewToken(userId: string, accessToken: string) {
+
+  static async renewToken(accessToken: string) {
     const response = await fetch(`${getApiUrl()}/oauth/renewToken`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({}),
     })
     const data = await response.json()
+    return data as oAuth
+  }
+
+  static async getWishes() {
+    const response = await fetch(`${getApiUrl()}/api/get-wishes`)
+    const data = await response.json()
+    if (response.status >= 400) throw Error(data.error)
+    return data as Wish[]
+  }
+
+  static async getWish(userId: string, wishId: string) {
+    const response = await fetch(
+      `${getApiUrl()}/api/get-wish/${userId}/${wishId}`
+    )
+    const data = await response.json()
+    if (response.status >= 400) throw Error(data.error)
+    return data as Wish
+  }
+
+  static async createWish(
+    accessToken: string,
+    title: string,
+    description?: string,
+    externalLink?: string
+  ) {
+    const response = await fetch(`${getApiUrl()}/create-wish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        externalLink,
+      }),
+    })
+    const data = await response.json()
+    if (response.status >= 400) throw data
     return data
+  }
+
+  static async getUser(userId: string) {
+    const response = await fetch(`${getApiUrl()}/api/get-user/${userId}`)
+    const data = await response.json()
+    if (response.status >= 400) throw Error(data.error)
+    return data as User
+  }
+
+  static async getUserComplete(userId: string) {
+    const response = await fetch(
+      `${getApiUrl()}/api/get-user-complete/${userId}`
+    )
+    const data = await response.json()
+    if (response.status >= 400) throw Error(data.error)
+    return data as User
+  }
+
+  static async createComment(
+    ownerId: string,
+    wishId: string,
+    username: string,
+    comment: string
+  ) {
+    const response = await fetch(
+      `${getApiUrl()}/api/create-comment/${ownerId}/${wishId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          comment,
+        }),
+      }
+    )
+    const data = await response.json()
+    if (response.status >= 400) throw data
+    return data as Wish
   }
 }
 

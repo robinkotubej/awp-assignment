@@ -17,3 +17,8 @@ export const COLOR = {
 
 export const EMAILREGEX =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{1,})$/i
+
+export const Z_INDEX = {
+  BACKDROP: '3',
+  MODAL_WINDOW: '4',
+}

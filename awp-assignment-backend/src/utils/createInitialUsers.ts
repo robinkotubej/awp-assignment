@@ -5,20 +5,32 @@ import { v4 as uuid } from 'uuid'
 
 const createInitialUsers = (db: Db) => {
     const users: User[] = [
-        // These are just some test users with passwords.
-        // The passwords are in clear text for testing purposes (don't do this in production).
         {
-            _id: uuid(),
+            _id: 'sdadas361654sda54dsa5ads64',
             username: 'Elonko',
             email: 'robinkotubej@gmail.com',
             password: '1234',
             timeRegistered: new Date(),
+            wishes: [
+                {
+                    _id: uuid(),
+                    timeCreated: new Date(),
+                    title: 'My secret wish',
+                    description: 'This is my spectial wish buy it for me',
+                    externalUrl: 'www.baaa.dk',
+                    comments: [
+                        {
+                            _id: uuid(),
+                            timeCreated: new Date(),
+                            username: 'Robin Kotubej',
+                            comment: 'This is an amazing wish bro',
+                        },
+                    ],
+                },
+            ],
         },
     ]
 
-    // We run through all users and hash their password.
-    // Ideally, this should happen only in POST /api/users/ when signing up a new user,
-    // or in PUT /api/users/ when changing the password.
     users.forEach(async user => {
         const hashedPassword: string = await new Promise((resolve, reject) => {
             bcrypt.hash(user.password, 10, (err, hash) => {

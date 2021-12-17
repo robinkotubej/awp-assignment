@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { COLOR } from '../constants'
 import ErrorSVG from '../icons/ErrorSVG'
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends InputHTMLAttributes<HTMLTextAreaElement> {
   label: string
   error?: string
-  width?: number
+  rows?: number
 }
 
-const Input = ({ label, error, width, ...props }: Props) => (
+const TextArea = ({ label, error, rows, ...props }: Props) => (
   <Container>
     <LabelRow>
       <Label>{label}</Label>
@@ -21,7 +21,7 @@ const Input = ({ label, error, width, ...props }: Props) => (
         </ErrorMessage>
       )}
     </LabelRow>
-    <StyledInput error={error} width={width} {...props} />
+    <StyledTextarea error={error} {...props} rows={rows} />
   </Container>
 )
 
@@ -48,15 +48,15 @@ const ErrorMessage = styled.div`
   color: ${COLOR.RED};
   font-weight: 600;
 `
-const StyledInput = styled.input<{ width?: number; error?: string }>`
-  width: ${props => (props.width ? props.width : 400)}px;
-  height: 50px;
+const StyledTextarea = styled.textarea<{ error?: string }>`
+  width: 400px;
   border-radius: 8px;
   font-size: 14px;
-  padding: 0 14px;
+  padding: 14px 14px;
   background: #eee;
   color: #444;
+  resize: none;
   border: 1px solid ${props => (props.error ? COLOR.RED : '#eee')};
 `
 
-export default Input
+export default TextArea

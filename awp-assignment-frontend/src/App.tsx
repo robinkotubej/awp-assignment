@@ -1,11 +1,12 @@
-import AskQuestion from './pages/AskQuestion'
+import CreateWish from './pages/CreateWish'
 import Header from './components/Header'
 import { Router } from '@reach/router'
 import Home from './pages/Home'
 import styled from 'styled-components'
-import QuestionDetail from './pages/QuestionDetail'
 import Login from './pages/Login'
 import { AuthProvider } from './services/Auth'
+import WishDetail from './pages/WishDetail'
+import UserProfile from './pages/UserProfile'
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
         <Content>
           <Router>
             <Home path="/" />
-            <AskQuestion path="/ask-question" />
-            <QuestionDetail path="question/:questionId" />
+            <CreateWish path="/create-wish" />
+            <WishDetail path="wish/:ownerId/:wishId" />
+            <UserProfile path="user/:userId" />
             <Login path="/login" />
           </Router>
         </Content>

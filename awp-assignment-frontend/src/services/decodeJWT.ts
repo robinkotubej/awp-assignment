@@ -6,7 +6,7 @@ interface myJWT extends JwtPayload {
 }
 
 const decodeJWT = (token: string) => {
-  const decoded = jwtDecode<myJWT>(token) // Returns with the JwtPayload type
+  const decoded = jwtDecode<myJWT>(token)
 
   return decoded
 }

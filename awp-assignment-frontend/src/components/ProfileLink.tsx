@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Link } from '@reach/router'
-import { useState, useEffect } from 'react'
 import { useAuth } from '../services/Auth'
 import UserBubble from './UserBubble'
 

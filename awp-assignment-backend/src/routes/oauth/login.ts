@@ -8,8 +8,7 @@ import jwt from 'jsonwebtoken'
 const login = (app: Express, db: Db) => {
     app.post('/oauth/authorize', async (req, res) => {
         const { email, password } = req.body
-        // tslint:disable-next-line:no-console
-        console.log(email, password)
+
         if (!email || !password) {
             res.status(401).json({ emptyErr: 'Email or password missing!' })
             return

@@ -1,11 +1,17 @@
 import { useState, useEffect, createContext, useContext, FC } from 'react'
 import Api from './Api'
 import decodeJWT from './decodeJWT'
+import AlertModal from '../components/AlertModal'
 
 interface Credentials {
   userId: string | null
   username: string | null
   accessToken: string | null
+}
+interface ErrorModalProps {
+  message: string
+  btnMessage: string
+  onClose: () => void
 }
 
 interface Auth {
@@ -14,8 +20,8 @@ interface Auth {
   username: string | null
   accessToken: string | null
   login: (userId: string, accessToken: string, username: string) => void
-
   logout: () => void
+  openErrorModal: (props: ErrorModalProps) => void
 }
 
 export const AuthContext = createContext<Auth>({
@@ -23,15 +29,16 @@ export const AuthContext = createContext<Auth>({
   userId: null,
   username: null,
   accessToken: null,
-
   login: () => {},
   logout: () => {},
+  openErrorModal: () => {},
 })
 export const useAuth = () => useContext(AuthContext)
 
 export const AuthProvider: FC = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [credentials, setCredentials] = useState<Credentials | null>(null)
+  const [authError, setAuthError] = useState<ErrorModalProps | null>(null)
 
   if (!credentials && typeof window !== 'undefined') {
     const username = localStorage.getItem('username')
@@ -44,21 +51,34 @@ export const AuthProvider: FC = ({ children }) => {
     if (!credentials) return
 
     const { accessToken, userId } = credentials
-    if (accessToken === null) {
+    if (!accessToken || !userId) {
       setLoggedIn(false)
       return
     }
     const { exp } = decodeJWT(accessToken)
 
     if (exp && userId) {
-      console.log(Date.now() > exp * 1000)
-      console.log(new Date(exp * 1000))
-      console.log(new Date(Date.now()))
       if (exp < Date.now() / 1000) {
-        Api.renewToken(userId, accessToken).then(token => {
-          const { userId, username } = decodeJWT(token)
-          login(userId, username, token)
-        })
+        try {
+          Api.renewToken(accessToken).then(res => {
+            if (res.error) {
+              const onClose = () => {
+                logout()
+                setAuthError(null)
+              }
+              setAuthError({
+                message: res.error,
+                btnMessage: 'Log out',
+                onClose,
+              })
+              return
+            }
+            const { userId, username } = decodeJWT(res.accessToken!)
+            login(userId, username, res.accessToken!)
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
     setLoggedIn(true)
@@ -79,6 +99,20 @@ export const AuthProvider: FC = ({ children }) => {
 
     setCredentials({ userId: null, username: null, accessToken: null })
   }
+  const openErrorModal = ({
+    btnMessage,
+    message,
+    onClose,
+  }: ErrorModalProps) => {
+    setAuthError({
+      btnMessage,
+      message,
+      onClose: () => {
+        onClose()
+        setAuthError(null)
+      },
+    })
+  }
 
   return (
     <AuthContext.Provider
@@ -89,8 +123,11 @@ export const AuthProvider: FC = ({ children }) => {
         accessToken: credentials?.accessToken || null,
         login,
         logout,
+        openErrorModal,
       }}
     >
+      {authError && <AlertModal {...authError} />}
+
       {children}
     </AuthContext.Provider>
   )
