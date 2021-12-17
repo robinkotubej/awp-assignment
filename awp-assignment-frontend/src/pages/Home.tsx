@@ -12,6 +12,11 @@ const Home = (props: RouteComponentProps) => {
   const fetchAuctions = async () => {
     try {
       const wishes = await Api.getWishes()
+      wishes.sort((a: Wish, b: Wish) => {
+        return (
+          new Date(b.timeCreated).getTime() - new Date(a.timeCreated).getTime()
+        )
+      })
       setWishes(wishes)
       setLoading(false)
     } catch (error) {
